@@ -6,7 +6,7 @@
     </td>
   </tr>
   <tr>
-    <td width=15%><img src=https://raw.githubusercontent.com/Robot-Wranglers/docker-imgrot/master/img/icon.png style="width:150px"></td>
+    <td width=15%><img src={{github.raw_url}}/master/img/icon.png style="width:150px"></td>
     <td align=center>
     <center>
     Tool for creating 3D rotation gifs from 2D images
@@ -14,7 +14,7 @@
     </td>
   </tr>
 </table>
-<a href="https://hub.docker.com/r/robotwranglers/imgrot"><img src="https://img.shields.io/badge/dockerhub--blue.svg?logo=Docker"></a>
+<a href="{{dockerhub.repo_url}}"><img src="https://img.shields.io/badge/dockerhub--blue.svg?logo=Docker"></a>
 
 -------------------------------------
 
@@ -28,7 +28,7 @@ This adds better CLI parsing, support for python3, newer opencv, and works via d
 
 ## Installation
 
-See [dockerhub](https://hub.docker.com/r/robotwranglers/imgrot) for available releases.
+See [dockerhub]({{dockerhub.repo_url}}) for available releases.
 
 ```
 pip install -r requirements.txt
@@ -41,21 +41,7 @@ pip install -r requirements.txt
 Usage info follows:
 
 ```bash
-Usage: demo.py [OPTIONS] IMG_PATH
-
-Options:
-  --range TEXT              Range to rotate through
-  --stream / --no-stream    Stream output in raw format (for use with pipes).
-                            Implies --animate
-  --animate / --no-animate  Generate an animated gif.  (Not required for
-                            --display)
-  --display / --no-display  Display output with chafa
-  --view / --no-view        View a file with chafa (don't generate anything)
-  --output-dir TEXT         Output directory for frames
-  --output-file TEXT        Output file for animated gif
-  --img-shape TEXT          Ideal image shape in WxH format (optional)
-  --help                    Show this message and exit.
-
+{{bash('python demo.py --help')}}
 ```
 
 -------------------------------------
