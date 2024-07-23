@@ -1,7 +1,7 @@
+from math import pi
+
 import cv2
 import numpy as np
-
-from util import get_rad, load_image
 
 # Usage:
 #     Change main function with ideal arguments
@@ -26,21 +26,46 @@ from util import get_rad, load_image
 #     2.        : http://jepsonsblog.blogspot.tw/2012/11/rotation-in-3d-using-opencvs.html
 
 
+def get_rad(theta, phi, gamma):
+    return (deg_to_rad(theta), deg_to_rad(phi), deg_to_rad(gamma))
+
+
+def get_deg(rtheta, rphi, rgamma):
+    return (rad_to_deg(rtheta), rad_to_deg(rphi), rad_to_deg(rgamma))
+
+
+def deg_to_rad(deg):
+    return deg * pi / 180.0
+
+
+def rad_to_deg(rad):
+    return rad * 180.0 / pi
+
+
 class ImageTransformer:
     """Perspective transformation class for image
     with shape (height, width, #channels)"""
 
+    def load_image(self, img_path, shape=None):
+        img = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
+        if shape is not None:
+            img = cv2.resize(img, shape)
+        return img
+
     def __init__(self, image_path, shape):
         self.image_path = image_path
-        self.image = load_image(image_path, shape)
+        self.image = self.load_image(image_path, shape)
 
         self.height = self.image.shape[0]
         self.width = self.image.shape[1]
         self.num_channels = self.image.shape[2]
 
-    """ Wrapper of Rotating a Image """
+    @staticmethod
+    def save_image(img_path, img):
+        cv2.imwrite(img_path, img)
 
     def rotate_along_axis(self, theta=0, phi=0, gamma=0, dx=0, dy=0, dz=0):
+        """Wrapper for rotating a image"""
 
         # Get radius of rotation along 3 axes
         rtheta, rphi, rgamma = get_rad(theta, phi, gamma)
