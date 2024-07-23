@@ -9,8 +9,8 @@
     <td width=15%><img src=https://raw.githubusercontent.com/Robot-Wranglers/docker-imgrot/master/img/icon.png style="width:150px"></td>
     <td align=center>
     <center>
-    Tool for creating 3D rotation gifs from 2D images
-    <img align=center width=200px src=img/demo.gif>
+    Tool for creating 3D rotation gifs from 2D images<br/>
+    <img align=center width=150px src=img/demo.gif>
     </center>
     </td>
   </tr>
