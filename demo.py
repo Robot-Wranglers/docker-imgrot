@@ -44,11 +44,11 @@ logger = logging.getLogger(__name__)
     default=False,
     help="Stream output in raw format (for use with pipes).  Implies --animate",
 )
-@click.option(
-    "--animate/--no-animate",
-    default=False,
-    help="Generate an animated gif.  (Not required for --display)",
-)
+# @click.option(
+#     "--animate/--no-animate",
+#     default=False,
+#     help="Generate an animated gif.  (Not required for --display)",
+# )
 @click.option("--display/--no-display", default=False, help="Display output with chafa")
 @click.option(
     "--view/--no-view",
@@ -62,21 +62,23 @@ logger = logging.getLogger(__name__)
 @click.option(
     "--img-shape", default=None, help="Ideal image shape in WxH format (optional)"
 )
-@click.option(
-    "--loop", default='1', help="How many times to loop the animation.  (Use 0 for forever)"
-)
-@click.option(
-    "--background", default='1', help="Background color (passed forward to 'convert')"
-)
+# @click.option(
+#     "--loop",
+#     default="1",
+#     help="How many times to loop the animation.  (Use 0 for forever)",
+# )
+# @click.option(
+#     "--background", default="1", help="Background color (passed forward to 'convert')"
+# )
 @click.argument("img_path", required=True)
 def run(
     img_path: str,
-    animate: bool = False,
+    # animate: bool = False,
     display: bool = False,
     img_shape=None,
     output_dir: str = "/tmp",
-    background: str = "black",
-    loop: str = "1",
+    # background: str = "black",
+    # loop: str = "1",
     output_file: str = "/tmp/imgrot.gif",
     rot_range: str = "360",
     stream: bool = False,
@@ -87,52 +89,51 @@ def run(
         raise SystemExit(1)
     rot_range = int(rot_range)
     img_shape = img_shape and list(map(int, img_shape.split("x")))
-    animate = animate or stream
-    rotate = not view
-    if rotate:
-        it = ImageTransformer(img_path, img_shape)
-        if not os.path.isdir(output_dir):
-            os.mkdir(output_dir)
-        logger.debug(f"Rotating {img_path} .. ")
+    # animate = animate or stream
+    # rotate = not view
+    # if rotate:
+    it = ImageTransformer(img_path, img_shape)
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
+    logger.debug(f"Rotating {img_path} .. ")
 
-        # yz-axis from 0 to 360 degree
-        # rotargs=dict(phi = ang, gamma=ang)
-        # z-axis(Normal 2D) from 0 to 360 degree
-        # rotargs=dict(gamma=ang)
-        # y-axis from 0-360 degree, 5 pixel shift in +X
-        for ang in range(0, rot_range):
-            rotargs = dict(phi=ang, dx=5)
-            rotated_img = it.rotate_along_axis(**rotargs)
-            save_image(f"{output_dir}/{str(ang).zfill(3)}.png", rotated_img)
-        logger.debug("Done")
+    # yz-axis from 0 to 360 degree
+    # rotargs=dict(phi = ang, gamma=ang)
+    # z-axis(Normal 2D) from 0 to 360 degree
+    # rotargs=dict(gamma=ang)
+    # y-axis from 0-360 degree, 5 pixel shift in +X
+    for ang in range(0, rot_range):
+        rotargs = dict(phi=ang, dx=5)
+        rotated_img = it.rotate_along_axis(**rotargs)
+        save_image(f"{output_dir}/{str(ang).zfill(3)}.png", rotated_img)
+    logger.debug("Done")
 
-        command = f"ls {output_dir}/|wc -l"
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        if result.returncode != 0:
-            logger.debug(f"Command failed with return code {result.returncode}\n")
-            raise SystemExit(result.returncode)
-        else:
-            logger.debug("Total Frames: {result.stdout.strip()}")
-    if animate:
-        logger.debug("Animating..")
-        command = f"convert -background {background} -alpha remove -alpha off -delay .01 -loop {loop} {output_dir}/*.png {output_file}"
-        result = subprocess.run(
-            command, shell=True, stdout=sys.stderr, stderr=sys.stderr
-        )
-        if result.returncode != 0:
-            logger.debug(f"Command failed with return code {result.returncode}")
-            raise SystemExit(result.returncode)
+    command = f"ls {output_dir}/|wc -l"
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    if result.returncode != 0:
+        logger.debug(f"Command failed with return code {result.returncode}\n")
+        raise SystemExit(result.returncode)
+    else:
+        logger.debug("Total Frames: {result.stdout.strip()}")
+    # if animate:
+    logger.debug("Animating..")
+    # command = f"convert -background {background} -alpha remove -alpha off -delay .01 -loop {loop} {output_dir}/*.png {output_file}"
+    command = f"ffmpeg -y -framerate 140  -pattern_type glob -i '{output_dir}/*.png' -vf 'fps=60,scale=320:-1:flags=lanczos' {output_file} 2>/dev/null"
+    result = subprocess.run(command, shell=True, stdout=sys.stderr, stderr=sys.stderr)
+    if result.returncode != 0:
+        logger.debug(f"Command failed with return code {result.returncode}")
+        raise SystemExit(result.returncode)
 
     if view:
         logger.debug(f"Viewing {img_path}")
         os.system(f"chafa --duration=5 {img_path}")
     elif display:
-        if animate:
-            logger.debug("Displaying animated gif..")
-            os.system(f"chafa {output_file}")
-        else:
-            logger.debug("Displaying framewise..")
-            os.system(f"chafa --clear --symbols braille --duration .05 {output_dir}/*png")
+        # if animate:
+        logger.debug("Displaying animated gif..")
+        os.system(f"chafa --symbols 'braille' {output_file}")
+        # else:
+        #     logger.debug("Displaying framewise..")
+        #     os.system(f"chafa --clear --symbols braille --duration .05 {output_dir}/*png")
     elif stream:
         logger.debug("Streaming animation..")
         with open(output_file, "rb") as binary_file:

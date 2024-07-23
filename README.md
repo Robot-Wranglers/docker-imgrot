@@ -50,8 +50,6 @@ Options:
   --range TEXT              Range to rotate through
   --stream / --no-stream    Stream output in raw format (for use with pipes).
                             Implies --animate
-  --animate / --no-animate  Generate an animated gif.  (Not required for
-                            --display)
   --display / --no-display  Display output with chafa
   --view / --no-view        View a file with chafa (don't generate anything)
   --output-dir TEXT         Output directory for frames
@@ -67,16 +65,16 @@ Options:
 
 **A few examples of usage from docker:**
 
-```bash 
-
-# Renders a gif from a static image, then displays it with chafa
-$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --animate --display
-
-# Rotates a static image into many separate images
-# then displays frames via chafa.  This simulates 
-# animation, and is faster than gif output above
-$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --animate --display
-
+```bash
 # Saves the animated gif to a file. 
-$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --animate --stream > demo.gif
+$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200  --stream > demo.gif
 ```
+<img width=50% align=center src=img/demo.gif>
+
+```bash 
+# Renders a gif from a static image, then displays it with chafa
+$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --display
+```
+
+<img width=50% align=center src=img/demo.chafa.gif>
+

@@ -25,7 +25,8 @@ clean: docker.clean py-clean
 
 docs:
 	${pynchon.run} jinja render README.md.j2
-	${pynchon.run} vhs apply
+	PS1="$$ " sh -c "${pynchon.run} vhs apply"
+	
 
 docker.clean:
 	docker rmi $(DOCKER_IMAGE_NAME) >/dev/null || true
