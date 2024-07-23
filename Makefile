@@ -13,15 +13,16 @@ SRC_ROOT := $(shell dirname ${THIS_MAKEFILE})
 DOCKER_IMAGE_NAME?=imgrot
 DOCKER_ORG?=robotwranglers
 SHORT_SHA=$(shell git rev-parse --short HEAD)
+PYNCHON_CLI_VERSION=baf56b7
+# pynchon.run=docker run -v `pwd`:/workspace -w/workspace robotwranglers/pynchon:${PYNCHON_CLI_VERSION} 
+pynchon.run=pynchon
 
 .PHONY: build docs
 
 init:
 build: docker.build
 clean: docker.clean py-clean
-PYNCHON_CLI_VERSION=baf56b7
-# pynchon.run=docker run -v `pwd`:/workspace -w/workspace robotwranglers/pynchon:${PYNCHON_CLI_VERSION} 
-pynchon.run=pynchon
+
 docs:
 	${pynchon.run} jinja render README.md.j2
 
@@ -42,7 +43,7 @@ docker.shell:
 		--entrypoint bash $(DOCKER_IMAGE_NAME)
 
 docker.base=docker run --rm -v `pwd`:/workspace -w /workspace 
-docker.test docker.test:
+docker.test:
 	set -x \
 	&& ${docker.base} \
 		--entrypoint sh $(DOCKER_IMAGE_NAME) \
@@ -51,7 +52,7 @@ docker.test docker.test:
 		images/testing.png \
 		--range 360 --img-shape 200x200 \
 		--stream > .tmp.output.gif \
-	&& (which imgcat && .tmp.output.gif || true) 
+	&& (which imgcat && .tmp.output.gif || true) \
 	&& ${docker.base} $(DOCKER_IMAGE_NAME) \
 		images/testing.png --display
 

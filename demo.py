@@ -124,7 +124,7 @@ def run(
             os.system(f"chafa {output_file}")
         else:
             logger.debug("Displaying framewise..")
-            os.system(f"chafa --symbols braille --duration .05 {output_dir}/*")
+            os.system(f"chafa --symbols braille --duration .05 {output_dir}/*png")
     elif stream:
         logger.debug("Streaming animation..")
         with open(output_file, "rb") as binary_file:
