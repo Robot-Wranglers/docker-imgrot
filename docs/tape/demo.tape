@@ -6,7 +6,7 @@ Set Shell "sh"
 Set FontSize 16
 Set Width 600
 Set Height 500
-Set TypingSpeed .08
+Set TypingSpeed .06
 Set PlaybackSpeed 1
 Set CursorBlink false
 Type "python demo.py img/icon.png --display"

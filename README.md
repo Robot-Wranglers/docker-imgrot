@@ -69,7 +69,7 @@ Options:
 # Saves the animated gif to a file. 
 $ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200  --stream > demo.gif
 ```
-<img width=50% align=center src=img/demo.gif>
+<img width=25% align=center src=img/demo.gif>
 
 ```bash 
 # Renders a gif from a static image, then displays it with chafa
