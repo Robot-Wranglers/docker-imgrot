@@ -10,6 +10,7 @@
     <td align=center>
     <center>
     Tool for creating 3D rotation gifs from 2D images
+    <img align=center width=200px src=img/demo.gif>
     </center>
     </td>
   </tr>
@@ -22,7 +23,9 @@
 
 A fork / update for the excellent original work at [eborboihuc/rotate_3d](https://github.com/eborboihuc/rotate_3d).
 
-This adds better CLI parsing, support for python3, newer opencv, and works via docker.
+This adds better CLI parsing, support for python3, newer opencv, ability to animate and render animations, and works via docker.
+
+See also [the original docs](docs/README.original.md)
 
 -------------------------------------
 
@@ -38,7 +41,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-Usage info follows:
+**Basic usage info follows:**
 
 ```bash
 Usage: demo.py [OPTIONS] IMG_PATH
@@ -62,28 +65,18 @@ Options:
 
 ## Usage from Docker
 
-If you want to build locally, see the [Dockerfile in this repo](Dockerfile) and use the [Makefile](Makefile):
+**A few examples of usage from docker:**
 
-```bash
-$ make docker-build docker-test
-```
+```bash 
 
-If you don't want to build the container yourself, you can pull it like this:
+# Renders a gif from a static image, then displays it with chafa
+$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --animate --display
 
-```bash
-$ docker pull robotwranglers/imgrot
-Using default tag: latest
-latest: Pulling from robotwranglers/imgrot
-docker.io/robotwranglers/imgrot:latest
-```
+# Rotates a static image into many separate images
+# then displays frames via chafa.  This simulates 
+# animation, and is faster than gif output above
+$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --animate --display
 
-See a typical invocation below.  The 1st volume is for authenticating with SSM.  The 2nd volume shares the working directory with the container so commands using files (like `ssm put --file ./path/to/file /path/to/key`) can still work.
-
-```bash
-$ docker run \
-  -v ~/.aws:/root/.aws \
-  -v `pwd`:/workspace \
-  -w /workspace \
-  docker.io/robotwranglers/imgrot:latest \
-    --help
+# Saves the animated gif to a file. 
+$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --animate --stream > demo.gif
 ```

@@ -25,6 +25,7 @@ clean: docker.clean py-clean
 
 docs:
 	${pynchon.run} jinja render README.md.j2
+	${pynchon.run} vhs apply
 
 docker.clean:
 	docker rmi $(DOCKER_IMAGE_NAME) >/dev/null || true
@@ -49,12 +50,12 @@ docker.test:
 		--entrypoint sh $(DOCKER_IMAGE_NAME) \
 		-x -c "ls /opt/imgrot > /dev/null" \
 	&& ${docker.base} $(DOCKER_IMAGE_NAME) \
-		images/testing.png \
+		img/icon.png \
 		--range 360 --img-shape 200x200 \
 		--stream > .tmp.output.gif \
 	&& (which imgcat && .tmp.output.gif || true) \
 	&& ${docker.base} $(DOCKER_IMAGE_NAME) \
-		images/testing.png --display
+		img/icon.png --display
 
 test: docker.test
 

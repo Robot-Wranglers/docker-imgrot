@@ -32,7 +32,7 @@ Example of rotating an image along yz-axis from 0 to 360 degree with a 5 pixel s
 ```
 Then
 ```bash
-python demo.py images/000001.jpg 360
+python demo.py img/000001.jpg 360
 ```
 
 ## Parameters:

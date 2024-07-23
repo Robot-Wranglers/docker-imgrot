@@ -4,8 +4,8 @@
 #  then
 #  python demo.py [name of the image] [degree to rotate] ([ideal width] [ideal height])
 #  e.g.,
-#  python demo.py images/000001.jpg 360
-#  python demo.py images/000001.jpg 45 500 700
+#  python demo.py img/000001.jpg 360
+#  python demo.py img/000001.jpg 45 500 700
 #
 # Parameters:
 #  img_path  : path of image that you want rotated
@@ -62,6 +62,12 @@ logger = logging.getLogger(__name__)
 @click.option(
     "--img-shape", default=None, help="Ideal image shape in WxH format (optional)"
 )
+@click.option(
+    "--loop", default='1', help="How many times to loop the animation.  (Use 0 for forever)"
+)
+@click.option(
+    "--background", default='1', help="Background color (passed forward to 'convert')"
+)
 @click.argument("img_path", required=True)
 def run(
     img_path: str,
@@ -69,6 +75,8 @@ def run(
     display: bool = False,
     img_shape=None,
     output_dir: str = "/tmp",
+    background: str = "black",
+    loop: str = "1",
     output_file: str = "/tmp/imgrot.gif",
     rot_range: str = "360",
     stream: bool = False,
@@ -107,7 +115,7 @@ def run(
             logger.debug("Total Frames: {result.stdout.strip()}")
     if animate:
         logger.debug("Animating..")
-        command = f"convert -background black -alpha remove -alpha off -delay 0 -loop 1 {output_dir}/*.png {output_file}"
+        command = f"convert -background {background} -alpha remove -alpha off -delay .01 -loop {loop} {output_dir}/*.png {output_file}"
         result = subprocess.run(
             command, shell=True, stdout=sys.stderr, stderr=sys.stderr
         )
@@ -124,7 +132,7 @@ def run(
             os.system(f"chafa {output_file}")
         else:
             logger.debug("Displaying framewise..")
-            os.system(f"chafa --symbols braille --duration .05 {output_dir}/*png")
+            os.system(f"chafa --clear --symbols braille --duration .05 {output_dir}/*png")
     elif stream:
         logger.debug("Streaming animation..")
         with open(output_file, "rb") as binary_file:
