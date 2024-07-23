@@ -1,3 +1,4 @@
+<p align=center>
 <table width=100%>
   <tr>
     <td colspan=2><strong>
@@ -7,7 +8,7 @@
   </tr>
   <tr>
     <td width=15%><img src=https://raw.githubusercontent.com/Robot-Wranglers/docker-imgrot/master/img/icon.png style="width:150px"></td>
-    <td align=center>
+    <td width=80% align=center>
     <center>
     Tool for creating 3D rotation gifs from 2D images<br/>
     <img align=center width=150px src=img/demo.gif>
@@ -15,6 +16,7 @@
     </td>
   </tr>
 </table>
+</P>
 <a href="https://hub.docker.com/r/robotwranglers/imgrot"><img src="https://img.shields.io/badge/dockerhub--blue.svg?logo=Docker"></a>
 
 -------------------------------------
@@ -23,7 +25,9 @@
 
 A fork / update for the excellent original work at [eborboihuc/rotate_3d](https://github.com/eborboihuc/rotate_3d).
 
-This adds better CLI parsing, support for python3, newer opencv, ability to animate and render animations, and works via docker.
+The original uses `opencv` to rotate 2d -> 3d.  This version adds better CLI parsing, support for python3, newer opencv, ability to animate and render animations with `ffmpeg`, and works via docker.
+
+Besides creating gifs, it can display them inside a terminal, using [chafa](https://github.com/hpjansson/chafa).
 
 See also [the original docs](docs/README.original.md)
 
@@ -31,7 +35,7 @@ See also [the original docs](docs/README.original.md)
 
 ## Installation
 
-See [dockerhub](https://hub.docker.com/r/robotwranglers/imgrot) for available releases.
+Nothing on pypi.  See [dockerhub](https://hub.docker.com/r/robotwranglers/imgrot) for available releases.
 
 ```
 pip install -r requirements.txt
@@ -67,19 +71,19 @@ Options:
 
 ```bash
 # Saves the animated gif to a file. 
-$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200  --stream > demo.gif
+$ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot img/icon.png --range 360 --img-shape 200x200  --stream > demo.gif
 ```
 
-<span align=center>
+<p align=center>
 <img width=25% align=center src=img/demo.gif>
-</span>
+</p>
 
 ```bash 
-# Renders a gif from a static image, then displays it with chafa
-$ docker run --rm -v `pwd`:/workspace -w /workspace imgrot img/icon.png --range 360 --img-shape 200x200 --display
+# Renders a gif from a static image, then displays it in a terminal-friendly way with chafa
+$ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot img/icon.png --range 360 --img-shape 200x200 --display
 ```
 
-<span align=center>
+<p align=center>
 <img width=50% align=center src=img/demo.chafa.gif>
-</span>
+</p>
 
