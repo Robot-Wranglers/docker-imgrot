@@ -4,7 +4,7 @@ Output img/demo.chafa.gif
 Require "docker"
 Set Shell "sh"
 Set FontSize 16
-Set Width 600
+Set Width 700
 Set Height 500
 Set TypingSpeed .06
 Set PlaybackSpeed 1
