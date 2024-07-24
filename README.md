@@ -51,26 +51,36 @@ pip install -r requirements.txt
 Usage: demo.py [OPTIONS] IMG_PATH
 
 Options:
-  --range TEXT              Range to rotate through
-  --stream / --no-stream    Stream output in raw format (for use with pipes).
-                            Implies --animate
-  --display / --no-display  Display output with chafa
-  --view / --no-view        View a file with chafa (don't generate anything)
-  --output-dir TEXT         Output directory for frames
-  --output-file TEXT        Output file for animated gif
-  --img-shape TEXT          Ideal image shape in WxH format (optional)
-  --help                    Show this message and exit.
+  --bg TEXT               Background color to pass to chafa
+  --display               Display output with chafa
+  --invert                Pass --invert to chafa
+  --img-shape TEXT        Ideal image shape in WxH format (optional)
+  --duration TEXT         Duration argument to pass to chafa
+  --output-dir TEXT       Output directory for frames
+  --output-file TEXT      Output file for animated gif
+  --range TEXT            Range to rotate through
+  --stream / --no-stream  Stream output in raw format (for use with pipes).
+                          Implies --animate
+  --verbose               Whether or not ffmpeg-stderr is displayed
+  --view                  View a file with chafa (generates nothing)
+  --rotation TEXT         One of { x | y | yz }
+  --speed TEXT            Speed factor to pass to ffmpeg (default=.08)
+  --stretch               Whether to pass --stretch to chafa
+  --help                  Show this message and exit.
 
 ```
+
+You can also set `LOGLEVEL=debug` for more info.
 
 -------------------------------------
 
 ## Usage from Docker
 
-**A few examples of usage from docker:**
+A few examples of usage from docker:
+
+**Saving an animated gif to a file:**
 
 ```bash
-# Saves the animated gif to a file. 
 $ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot img/icon.png --range 360 --img-shape 200x200  --stream > demo.gif
 ```
 
@@ -78,12 +88,73 @@ $ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot im
 <img width=25% align=center src=img/demo.gif>
 </p>
 
+**Rendering a gif, then displaying it in a terminal-friendly way with chafa:**
+
 ```bash 
-# Renders a gif from a static image, then displays it in a terminal-friendly way with chafa
-$ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot img/icon.png --range 360 --img-shape 200x200 --display
+$ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot img/icon.png --display --stretch --bg lightblue
 ```
 
 <p align=center>
 <img width=50% align=center src=img/demo.chafa.gif>
 </p>
 
+Note that this tries to respect transparency in the original image, but for more contrast you can effectively add highlights by passing '--bg' arguments that go through to chafa.
+
+------------------------------
+
+**Changing axis of rotation**
+
+The rotation can be controlled to create a bunch of different effects:
+
+```bash 
+$ docker run -it --rm -v `pwd`:/workspace \
+  -w /workspace robotwranglers/imgrot \
+  img/icon.png \
+    --display --stretch \
+    --bg darkgreen \
+    --rotation <some-rotation here>
+```
+
+<p align=center>
+<table>
+  <tr>
+    <th>x</th>
+    <th>y</th>
+    <th>s,swivel</th>
+  </tr>  
+  <tr>
+    <td>
+      <img src=img/rx.gif></td>
+    <td>
+      <img src=img/ry.gif>
+      </td>
+    <td><img src=img/rs.gif></td>
+  </tr>
+  <tr>
+    <th>j,jitter</th>
+    <th>w,wobble</th>
+    <th>f,flip</th>
+  </tr>  
+  <tr>
+    <td>
+      <img src=img/rj.gif></td>
+    <td>
+      <img src=img/rw.gif>
+      </td>
+    <td><img src=img/rf.gif></td>
+  </tr>
+  <tr>
+    <th>exit-ul</th>
+    <th>exit-ur</th>
+    <th>exit-lr</th>
+  </tr>
+  <tr>
+    <td>
+      <img src=img/rul.gif></td>
+    <td>
+      <img src=img/rur.gif>
+      </td>
+    <td><img src=img/rlr.gif></td>
+  </tr>
+  </table>
+</p>

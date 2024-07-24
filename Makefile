@@ -23,10 +23,23 @@ init:
 build: docker.build
 clean: docker.clean py-clean
 
-docs:
+docs: docs.vhs docs.jinja #docs.rotations
+docs.jinja: 
 	${pynchon.run} jinja render README.md.j2
-	PS1="$$ " sh -c "${pynchon.run} vhs apply"
-	
+	python demo.py img/icon.png --stream > img/demo.gif
+docs.vhs:; PS1="$$ " sh -c "${pynchon.run} vhs apply"
+docs.rotations:
+	python demo.py img/graph.png --bg lightblue --rotation x --stream > img/rx.gif
+	python demo.py img/graph.png --bg lightblue --rotation y --stream > img/ry.gif
+	python demo.py img/graph.png --bg lightblue --rotation s --stream > img/rs.gif
+	python demo.py img/graph.png --bg lightblue --rotation j --stream > img/rj.gif
+	python demo.py img/graph.png --bg lightblue --rotation w --stream > img/rw.gif
+	python demo.py img/graph.png --bg lightblue --rotation f --stream > img/rf.gif
+	python demo.py img/graph.png --bg lightblue --rotation exit-ul --stream > img/rul.gif
+	python demo.py img/graph.png --bg lightblue --rotation exit-ur --stream > img/rur.gif
+	python demo.py img/graph.png --bg lightblue --rotation exit-lr --stream > img/rlr.gif
+	python demo.py img/graph.png --bg lightblue --rotation exit-ll --stream > img/rll.gif
+
 
 docker.clean:
 	docker rmi $(DOCKER_IMAGE_NAME) >/dev/null || true
