@@ -3,7 +3,8 @@
   <tr>
     <td colspan=2><strong>
     imgrot
-      </strong>&nbsp;&nbsp;&nbsp;&nbsp;
+      </strong><br/>
+      <a href="https://hub.docker.com/r/robotwranglers/imgrot"><img src="https://img.shields.io/badge/dockerhub-imgrot-blue"><img src="https://img.shields.io/docker/v/robotwranglers/imgrot"></a>
     </td>
   </tr>
   <tr>
@@ -17,7 +18,6 @@
   </tr>
 </table>
 </P>
-<a href="https://hub.docker.com/r/robotwranglers/imgrot"><img src="https://img.shields.io/badge/dockerhub--blue.svg?logo=Docker"></a>
 
 -------------------------------------
 
