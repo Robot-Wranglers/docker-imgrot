@@ -5,4 +5,4 @@ RUN apt-get update && apt-get -y install python3-dev python3-pip chafa imagemagi
 RUN mkdir /opt/imgrot 
 COPY . /opt/imgrot
 RUN pip3 install -r /opt/imgrot/requirements.txt --break-system-packages
-ENTRYPOINT [ "python3", "/opt/imgrot/demo.py" ]
+ENTRYPOINT [ "python3", "/opt/imgrot/imgrot.py" ]

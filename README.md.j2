@@ -27,7 +27,7 @@ A fork / update for the excellent original work at [eborboihuc/rotate_3d](https:
 
 The original uses `opencv` to rotate 2d -> 3d.  This version adds better CLI parsing, support for python3, newer opencv, ability to animate and render animations with `ffmpeg`, and works via docker.
 
-Besides creating gifs, it can display them inside a terminal, using [chafa](https://github.com/hpjansson/chafa).
+Different kinds of rotation are supported as well (see the end of this page for [a gallery](#changing-axis-of-rotation)).  Besides creating gifs, it can display them inside a terminal, using [chafa](https://github.com/hpjansson/chafa).
 
 See also [the original docs](docs/README.original.md)
 
@@ -48,7 +48,7 @@ pip install -r requirements.txt
 **Basic usage info follows:**
 
 ```bash
-{{bash('python demo.py --help')}}
+{{bash('python imgrot.py --help')}}
 ```
 
 You can also set `LOGLEVEL=debug` for more info.
@@ -59,7 +59,7 @@ You can also set `LOGLEVEL=debug` for more info.
 
 A few examples of usage from docker:
 
-**Saving an animated gif to a file:**
+#### Saving an Animation
 
 ```bash
 $ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot img/icon.png --range 360 --img-shape 200x200  --stream > demo.gif
@@ -69,7 +69,7 @@ $ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot im
 <img width=25% align=center src=img/demo.gif>
 </p>
 
-**Rendering a gif, then displaying it in a terminal-friendly way with chafa:**
+#### Terminal-Friendly Display 
 
 ```bash 
 $ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot img/icon.png --display --stretch --bg lightblue
@@ -79,11 +79,11 @@ $ docker run -it --rm -v `pwd`:/workspace -w /workspace robotwranglers/imgrot im
 <img width=50% align=center src=img/demo.chafa.gif>
 </p>
 
-Note that this tries to respect transparency in the original image, but for more contrast you can effectively add highlights by passing '--bg' arguments that go through to chafa.
+Note that this tries to respect transparency in the original image, but for more contrast with black images on black terminals, you can effectively add highlights by passing '--bg' arguments that go through to chafa.
 
 ------------------------------
 
-**Changing axis of rotation**
+#### Changing Axis of Rotation
 
 The rotation can be controlled to create a bunch of different effects:
 

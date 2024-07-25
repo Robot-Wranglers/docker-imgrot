@@ -19,7 +19,7 @@ Rotate along XZ axis
 Change main function with ideal [arguments](#parameters)
 
 ```bash
-python demo.py [path of the image] [degree to rotate] ([ideal width] [ideal height])
+python imgrot.py [path of the image] [degree to rotate] ([ideal width] [ideal height])
 ```
 e.g.,
 Example of rotating an image along yz-axis from 0 to 360 degree with a 5 pixel shift in +X direction
@@ -32,7 +32,7 @@ Example of rotating an image along yz-axis from 0 to 360 degree with a 5 pixel s
 ```
 Then
 ```bash
-python demo.py img/000001.jpg 360
+python imgrot.py img/000001.jpg 360
 ```
 
 ## Parameters:
