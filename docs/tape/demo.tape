@@ -9,7 +9,7 @@ Set Height 800
 Set TypingSpeed .05
 Set PlaybackSpeed 1
 Set CursorBlink false
-Type "python demo.py img/icon.png --display --stretch --bg lightblue"
+Type "python imgrot.py img/icon.png --display --stretch --bg lightblue"
 Sleep 1.1
 Enter
 Sleep 30

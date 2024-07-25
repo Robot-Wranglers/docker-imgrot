@@ -2,10 +2,10 @@
 # Usage:
 #  Change main function with ideal arguments
 #  then
-#  python demo.py [name of the image] [degree to rotate] ([ideal width] [ideal height])
+#  python imgrot.py [name of the image] [degree to rotate] ([ideal width] [ideal height])
 #  e.g.,
-#  python demo.py img/000001.jpg 360
-#  python demo.py img/000001.jpg 45 500 700
+#  python imgrot.py img/000001.jpg 360
+#  python imgrot.py img/000001.jpg 45 500 700
 #
 # Parameters:
 #  img_path  : path of image that you want rotated
@@ -27,15 +27,17 @@ import click
 
 from image_transformer import ImageTransformer
 
-# Read log level from environment variable
+# Setup logging
 log_level = os.getenv("LOGLEVEL", "INFO").upper()
 logging.basicConfig(
     level=getattr(logging, log_level, logging.INFO),
     format="%(asctime)s - imgrot - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stderr)],
 )
 logger = logging.getLogger(__name__)
 
 
+# Setup CLI interface
 @click.command()
 @click.option("--bg", default="black", help="Background color to pass to chafa")
 @click.option(
@@ -104,16 +106,10 @@ def run(
     duration = f"--duration {duration}" if duration else ""
     invert = invert and "--invert" or ""
     bg = f"--bg {bg}"
-    import math
 
     if not os.path.exists(img_path):
         logger.debug(f"{img_path} does not exist!")
         raise SystemExit(1)
-
-    # img_path_base=os.path.basename(img_path)
-    # err = os.system(f"convert {img_path} -fuzz 10% -transparent white -alpha off /tmp/{img_path_base}")
-    # if err: raise SystemExit(1)
-    # img_path = f"/tmp/{img_path_base}"
 
     rot_range = int(rot_range)
     img_shape = img_shape and list(map(int, img_shape.split("x")))
@@ -121,67 +117,8 @@ def run(
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
     logger.debug(f"Rotating {img_path} .. ")
-    import random
-
     for ang in range(0, rot_range):
-        if rotation in ["y"]:
-            # y-axis from 0-360 degree, 5 pixel shift in +X
-            rotargs = dict(phi=ang, dx=5)
-        elif rotation in ["x"]:
-            rotargs = dict(gamma=ang)
-        elif rotation in ["s", "swivel"]:
-            # yz-axis from 0 to 360 degree
-            rotargs = dict(phi=ang, gamma=ang)
-        elif rotation in ["jitter", "j"]:
-            rotargs = dict(
-                dx=random.choice([5, 0, 10]),
-                phi=random.choice([ang, -ang]),
-                gamma=random.choice([0, ang, -ang]),
-            )
-        elif rotation in ["wobble", "w"]:
-            rotargs = dict(
-                dx=random.choice([0, 10, 30]),
-                dy=random.choice([25, 0, 10]),
-                phi=random.choice([ang, -ang, math.sin(ang)]),
-                gamma=random.choice([ang, -ang]),
-            )
-        elif rotation in ["f", "flip"]:
-            rotargs = dict(dx=ang, dy=-ang, phi=math.tan(ang), gamma=ang)
-        elif rotation.startswith("q"):
-            rotargs = dict(
-                dx=random.choice([0, 5, 10]),
-                dy=random.choice([25, 0, 10]),
-                phi=random.choice([ang, -ang, math.sin(ang)]),
-                gamma=random.choice([ang, -ang]),
-            )
-        elif rotation.startswith("exit"):
-            direction = rotation.split("-")[1]
-            if direction == "ul":
-                rotargs = dict(
-                    dx=-ang,
-                    dy=-ang,
-                )
-            elif direction == "ur":
-                rotargs = dict(
-                    dx=ang,
-                    dy=-ang,
-                )
-            elif direction == "lr":
-                rotargs = dict(
-                    dx=ang,
-                    dy=ang,
-                )
-            elif direction == "ll":
-                rotargs = dict(
-                    dx=-ang,
-                    dy=ang,
-                )
-            else:
-                raise ValueError(f"unknown rotation: {rotation}")
-            rotargs.update(phi=math.tan(ang), gamma=math.tan(ang))
-        else:
-            raise ValueError(f"Not sure how to perform rotation {rotation}")
-        rotated_img = it.rotate_along_axis(**rotargs)
+        rotated_img = it.rotate_along_axis(**it.get_rotation_args(rotation, ang))
         fname = f"{output_dir}/{str(ang).zfill(3)}.png"
         it.save_image(fname, rotated_img)
     logger.debug("Done")
@@ -201,10 +138,10 @@ def run(
         f"""ffmpeg -y -i /tmp/.tmp.gif  -vf "split[s0][s1];[s0]palettegen[p];[s1]setpts={speed}*PTS[v];[v][p]paletteuse" {output_file} {quiet_maybe}""",
     ]
     for cmd in commands:
-        logger.warning(cmd)
+        logger.debug(cmd)
         result = subprocess.run(cmd, shell=True, stdout=sys.stderr, stderr=sys.stderr)
         if result.returncode != 0:
-            logger.debug(f"Command failed with return code {result.returncode}")
+            logger.critical(f"Command failed with return code {result.returncode}")
             raise SystemExit(result.returncode)
     if view:
         logger.debug(f"Viewing {img_path}")
@@ -223,7 +160,7 @@ def run(
             content = binary_file.read()
             sys.stdout.buffer.write(content)
     else:
-        logger.debug("No instructions, not sure what to do")
+        logger.critical("No instructions, not sure what to do")
         raise SystemExit(1)
 
 
