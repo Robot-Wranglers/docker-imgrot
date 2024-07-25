@@ -1,15 +1,18 @@
-<p align=center>
+<div align="center">
+
 <table width=100%>
   <tr>
-    <td colspan=2><strong>
+    <th width=10% align=center><strong>
     imgrot
-      </strong><br/>
+      </strong>
+    </th>
+    <th width=90% align=right>
       <a href="https://hub.docker.com/r/robotwranglers/imgrot"><img src="https://img.shields.io/badge/dockerhub-imgrot-blue"><img src="https://img.shields.io/docker/v/robotwranglers/imgrot"></a>
-    </td>
+    </th>
   </tr>
   <tr>
-    <td width=15%><img src=https://raw.githubusercontent.com/Robot-Wranglers/docker-imgrot/master/img/icon.png style="width:150px"></td>
-    <td width=80% align=center>
+    <td width=10%><img src=https://raw.githubusercontent.com/Robot-Wranglers/docker-imgrot/master/img/icon.png style="width:150px"></td>
+    <td width=90% align=center>
     <center>
     Tool for creating 3D rotation gifs from 2D images<br/>
     <img align=center width=150px src=img/demo.gif>
@@ -17,9 +20,7 @@
     </td>
   </tr>
 </table>
-</P>
-
--------------------------------------
+</div>
 
 ## Overview
 

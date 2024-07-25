@@ -23,10 +23,10 @@ init:
 build: docker.build
 clean: docker.clean py-clean
 
-docs: docs.vhs docs.jinja #docs.rotations
+docs: docs.vhs docs.jinja docs.rotations
+	python imgrot.py img/icon.png --stream > img/demo.gif
 docs.jinja: 
 	${pynchon.run} jinja render README.md.j2
-	python imgrot.py img/icon.png --stream > img/demo.gif
 docs.vhs:; PS1="$$ " sh -c "${pynchon.run} vhs apply"
 docs.rotations:
 	python imgrot.py img/graph.png --bg lightblue --rotation x --stream > img/rx.gif
