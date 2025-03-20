@@ -40,7 +40,6 @@ docs.rotations:
 	python imgrot.py img/graph.png --bg lightblue --rotation exit-lr --stream > img/rlr.gif
 	python imgrot.py img/graph.png --bg lightblue --rotation exit-ll --stream > img/rll.gif
 
-
 docker.clean:
 	docker rmi $(DOCKER_IMAGE_NAME) >/dev/null || true
 
@@ -69,7 +68,7 @@ docker.test:
 		--stream > .tmp.output.gif \
 	&& (which imgcat && .tmp.output.gif || true) \
 	&& ${docker.base} $(DOCKER_IMAGE_NAME) \
-		img/icon.png --display
+		img/icon.png --display --center
 
 test: docker.test
 

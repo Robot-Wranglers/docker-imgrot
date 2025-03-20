@@ -1,2 +1,2 @@
-opencv-python
-click
+opencv-python==4.11.0.86
+click==8.1.8

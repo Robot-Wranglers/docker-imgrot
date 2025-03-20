@@ -107,7 +107,7 @@ def run(
     stretch = "--stretch" if stretch else ""
     duration = f"--duration {duration}" if duration else ""
     invert = invert and "--invert" or ""
-    center = center and "--center" or ""
+    center = center and "--center on" or ""
     bg = f"--bg {bg}"
 
     if not os.path.exists(img_path):
