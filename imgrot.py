@@ -44,6 +44,7 @@ logger = logging.getLogger(__name__)
     "--display", is_flag=True, default=False, help="Display output with chafa"
 )
 @click.option("--invert", is_flag=True, default=False, help="Pass --invert to chafa")
+@click.option("--center", is_flag=True, default=False, help="Pass --center to chafa")
 @click.option(
     "--img-shape", default=None, help="Ideal image shape in WxH format (optional)"
 )
@@ -91,6 +92,7 @@ def run(
     duration: str = "",
     display: bool = False,
     invert: bool = False,
+    center: bool = False,
     verbose: bool = False,
     img_shape=None,
     speed: str = "0.08",
@@ -105,6 +107,7 @@ def run(
     stretch = "--stretch" if stretch else ""
     duration = f"--duration {duration}" if duration else ""
     invert = invert and "--invert" or ""
+    center = center and "--center" or ""
     bg = f"--bg {bg}"
 
     if not os.path.exists(img_path):
@@ -149,7 +152,7 @@ def run(
     elif display:
         logger.debug("Displaying animated gif..")
         os.system(
-            f"chafa {bg} {duration} {stretch} {invert} --symbols 'braille' {output_file}"
+            f"chafa {bg} {duration} {stretch} {invert} {center} --symbols 'braille' {output_file}"
         )
     elif stream:
         logger.debug("Streaming animation..")
